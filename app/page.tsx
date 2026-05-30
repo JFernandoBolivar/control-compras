@@ -2,7 +2,7 @@
 
 import React, { useState, createContext, useContext } from 'react';
 import { 
-  LayoutDashboard, Clock, Bell, FileText, BarChart3, AlertCircle, 
+  LayoutDashboard, Clock, Bell, FileText, BarChart3, AlertCircle, AlertTriangle,
   CheckCircle2, Info, Trash2, Search, TrendingUp, Users, Check, X, Menu, Calendar, LogOut,
   Upload, Eye, FileCheck, CreditCard, ClipboardList, Shuffle, Plus, ChevronDown
 } from 'lucide-react';
@@ -474,6 +474,33 @@ function NuevoExpedienteView() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disponibilidad, setDisponibilidad] = useState<null | boolean>(null);
+  const [proveedorSancionado, setProveedorSancionado] = useState<null | { sancionado: boolean; razon?: string; empresa?: string }>(null);
+  const [verificandoRif, setVerificandoRif] = useState(false);
+
+  // Lista de proveedores sancionados (en producción vendría de una API/BD)
+  const PROVEEDORES_SANCIONADOS = [
+    { rif: 'G-11223344-5', razon: 'Incumplimiento de contrato - Resolución N° 2025-0892', empresa: 'Corporación Fantasma C.A.' },
+    { rif: 'J-00000000-0', razon: 'Fraude documentario - Expediente N° 2024-1234', empresa: 'Empresa Ficticia S.A.' },
+  ];
+
+  const verificarRif = (rif: string) => {
+    if (!rif || rif.length < 5) {
+      setProveedorSancionado(null);
+      return;
+    }
+    
+    setVerificandoRif(true);
+    // Simulamos una verificación con delay
+    setTimeout(() => {
+      const sancionado = PROVEEDORES_SANCIONADOS.find(p => p.rif.toUpperCase() === rif.toUpperCase());
+      if (sancionado) {
+        setProveedorSancionado({ sancionado: true, razon: sancionado.razon, empresa: sancionado.empresa });
+      } else {
+        setProveedorSancionado({ sancionado: false });
+      }
+      setVerificandoRif(false);
+    }, 500);
+  };
 
   const verificarDisponibilidad = () => {
     setLoading(true);
@@ -485,6 +512,12 @@ function NuevoExpedienteView() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Verificar si el proveedor está sancionado
+    if (proveedorSancionado?.sancionado) {
+      return; // No permitir envío
+    }
+    
     setLoading(true);
     const formData = new FormData(e.currentTarget);
     
@@ -604,11 +637,49 @@ function NuevoExpedienteView() {
               <span className="bg-amber-200 w-6 h-6 rounded flex items-center justify-center border border-amber-300">3</span> Datos del Proveedor
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              <div>
+              <div className="md:col-span-3">
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">RIF <span className="text-red-500">*</span></label>
-                <input name="rif" required type="text" placeholder="J-12345678-9" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 outline-none" />
+                <div className="flex gap-2">
+                  <input 
+                    name="rif" 
+                    required 
+                    type="text" 
+                    placeholder="J-12345678-9" 
+                    onChange={(e) => verificarRif(e.target.value)}
+                    className={`flex-1 px-4 py-2.5 bg-slate-50 border rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 outline-none ${
+                      proveedorSancionado?.sancionado ? 'border-red-500 bg-red-50' : 'border-slate-300'
+                    }`} 
+                  />
+                  {verificandoRif && (
+                    <div className="flex items-center px-3">
+                      <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  )}
+                </div>
+                {proveedorSancionado?.sancionado && (
+                  <div className="mt-3 bg-red-100 border border-red-400 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="font-bold text-red-800">PROVEEDOR SANCIONADO</h4>
+                        <p className="text-sm text-red-700 mt-1">
+                          <strong>{proveedorSancionado.empresa}</strong>
+                        </p>
+                        <p className="text-sm text-red-600 mt-1">{proveedorSancionado.razon}</p>
+                        <p className="text-xs text-red-500 mt-2 font-semibold">
+                          No es posible continuar con este proveedor. Consulte el Registro Nacional de Contratistas.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {proveedorSancionado && !proveedorSancionado.sancionado && (
+                  <p className="text-sm text-emerald-600 mt-2 flex items-center gap-1">
+                    <CheckCircle2 className="w-4 h-4" /> Proveedor verificado - Sin sanciones registradas
+                  </p>
+                )}
               </div>
-              <div className="md:col-span-2">
+              <div className="md:col-span-3">
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">Razón Social <span className="text-red-500">*</span></label>
                 <input name="razonSocial" required type="text" placeholder="Nombre de la empresa" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
@@ -639,12 +710,18 @@ function NuevoExpedienteView() {
         </div>
 
         <div className="bg-slate-200/50 px-8 py-5 border-t border-slate-300 flex justify-end gap-4">
-          <button type="reset" className="px-6 py-2.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg shadow-sm">
+          <button type="reset" onClick={() => setProveedorSancionado(null)} className="px-6 py-2.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg shadow-sm">
             Limpiar
           </button>
-          <button disabled={loading} type="submit" className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md flex items-center gap-2 disabled:opacity-50">
+          <button 
+            disabled={loading || proveedorSancionado?.sancionado} 
+            type="submit" 
+            className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-md flex items-center gap-2 disabled:opacity-50 ${
+              proveedorSancionado?.sancionado ? 'bg-red-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+            }`}
+          >
             {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Check className="w-4 h-4" />}
-            {loading ? 'Procesando...' : 'Crear Expediente'}
+            {proveedorSancionado?.sancionado ? 'Proveedor Sancionado' : loading ? 'Procesando...' : 'Crear Expediente'}
           </button>
         </div>
       </form>
