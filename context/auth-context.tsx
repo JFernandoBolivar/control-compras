@@ -2,11 +2,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+export type UserRole = 'solicitante' | 'analista' | 'aprobador' | 'pagador' | 'auditor';
+
 export interface User {
   id: string;
   username: string;
   email: string;
-  role: 'admin' | 'user' | 'gerente';
+  role: UserRole;
   name: string;
 }
 
@@ -24,7 +26,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Cargar sesión al montar el componente
   useEffect(() => {
     const storedUser = localStorage.getItem('auth_user');
     if (storedUser) {
@@ -40,36 +41,55 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (username: string, password: string): Promise<boolean> => {
-    // Simulación de autenticación con credenciales válidas
     const validCredentials: Record<string, { password: string; user: User }> = {
-      admin: {
-        password: 'admin',
+      solicitante: {
+        password: 'solicitante',
         user: {
           id: '1',
-          username: 'admin',
-          email: 'admin@techsolutions.com',
-          role: 'admin',
-          name: 'Administrador',
+          username: 'solicitante',
+          email: 'solicitante@mpprijp.gob.ve',
+          role: 'solicitante',
+          name: 'Carlos Méndez',
         },
       },
-      user: {
-        password: 'user',
+      analista: {
+        password: 'analista',
         user: {
           id: '2',
-          username: 'user',
-          email: 'user@techsolutions.com',
-          role: 'user',
-          name: 'Usuario Regular',
+          username: 'analista',
+          email: 'analista@mpprijp.gob.ve',
+          role: 'analista',
+          name: 'María López',
         },
       },
-      gerente: {
-        password: 'gerente',
+      aprobador: {
+        password: 'aprobador',
         user: {
           id: '3',
-          username: 'gerente',
-          email: 'gerente@techsolutions.com',
-          role: 'gerente',
-          name: 'Gerente de Compras',
+          username: 'aprobador',
+          email: 'aprobador@mpprijp.gob.ve',
+          role: 'aprobador',
+          name: 'José Rodríguez',
+        },
+      },
+      pagador: {
+        password: 'pagador',
+        user: {
+          id: '4',
+          username: 'pagador',
+          email: 'pagador@mpprijp.gob.ve',
+          role: 'pagador',
+          name: 'Ana Martínez',
+        },
+      },
+      auditor: {
+        password: 'auditor',
+        user: {
+          id: '5',
+          username: 'auditor',
+          email: 'auditor@mpprijp.gob.ve',
+          role: 'auditor',
+          name: 'Luis García',
         },
       },
     };

@@ -35,18 +35,23 @@ export default function LoginView() {
     setLoading(false);
   };
 
+  const demoUsers = [
+    { id: 'solicitante', label: 'Solicitante', desc: 'Crear expedientes' },
+    { id: 'analista', label: 'Analista', desc: 'Validar documentos' },
+    { id: 'aprobador', label: 'Aprobador', desc: 'Aprobar expedientes' },
+    { id: 'pagador', label: 'Pagador', desc: 'Registrar pagos' },
+    { id: 'auditor', label: 'Auditor', desc: 'Auditar procesos' },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
-      {/* Fondo decorativo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
       </div>
 
       <div className="relative w-full max-w-md">
-        {/* Card principal */}
         <div className="bg-slate-800 rounded-2xl shadow-2xl p-8 border border-slate-700">
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mb-4">
               <LogIn className="w-8 h-8 text-white" />
@@ -55,9 +60,7 @@ export default function LoginView() {
             <p className="text-slate-400">Gestión de Compras Internas</p>
           </div>
 
-          {/* Formulario */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Error message */}
             {error && (
               <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-4 flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
@@ -65,7 +68,6 @@ export default function LoginView() {
               </div>
             )}
 
-            {/* Username field */}
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-slate-300 mb-2">
                 Usuario
@@ -84,7 +86,6 @@ export default function LoginView() {
               </div>
             </div>
 
-            {/* Password field */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
                 Contraseña
@@ -103,7 +104,6 @@ export default function LoginView() {
               </div>
             </div>
 
-            {/* Submit button */}
             <button
               type="submit"
               disabled={loading || !username || !password}
@@ -123,38 +123,23 @@ export default function LoginView() {
             </button>
           </form>
 
-          {/* Demo credentials */}
           <div className="mt-8 pt-6 border-t border-slate-700">
             <p className="text-slate-400 text-sm text-center mb-4">Credenciales de demostración:</p>
-            <div className="grid grid-cols-3 gap-3">
-              <button
-                onClick={() => handleDemoLogin('admin')}
-                disabled={loading}
-                className="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium py-2 px-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed border border-slate-600"
-              >
-                <div className="font-semibold">admin</div>
-                <div className="text-slate-500">admin</div>
-              </button>
-              <button
-                onClick={() => handleDemoLogin('user')}
-                disabled={loading}
-                className="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium py-2 px-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed border border-slate-600"
-              >
-                <div className="font-semibold">user</div>
-                <div className="text-slate-500">user</div>
-              </button>
-              <button
-                onClick={() => handleDemoLogin('gerente')}
-                disabled={loading}
-                className="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium py-2 px-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed border border-slate-600"
-              >
-                <div className="font-semibold">gerente</div>
-                <div className="text-slate-500">gerente</div>
-              </button>
+            <div className="grid grid-cols-2 gap-2">
+              {demoUsers.map((user) => (
+                <button
+                  key={user.id}
+                  onClick={() => handleDemoLogin(user.id)}
+                  disabled={loading}
+                  className="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium py-2.5 px-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed border border-slate-600 text-left"
+                >
+                  <div className="font-semibold text-white">{user.label}</div>
+                  <div className="text-slate-500 text-[10px]">{user.desc}</div>
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Info */}
           <div className="mt-6 pt-6 border-t border-slate-700">
             <p className="text-slate-500 text-xs text-center">
               Sistema de gestión de compras internas. Todos los datos se guardan localmente en tu navegador.
