@@ -479,7 +479,7 @@ function NuevoExpedienteView() {
 
   // Lista de proveedores sancionados (en producción vendría de una API/BD)
   const PROVEEDORES_SANCIONADOS = [
-    { rif: 'G-11223344-5', razon: 'Incumplimiento de contrato - Resolución N° 2025-0892', empresa: 'Corporación Fantasma C.A.' },
+    { rif: 'G-11223344-5', razon: 'Inhabilitada por 3 años – Providencia Administrativa DG/2025/009 del SNC', empresa: 'Corporación Fantasma C.A.' },
     { rif: 'J-00000000-0', razon: 'Fraude documentario - Expediente N° 2024-1234', empresa: 'Empresa Ficticia S.A.' },
   ];
 
