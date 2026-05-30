@@ -110,42 +110,43 @@ const timelineEvents = [
 
 // --- COMPONENTS ---
 
-function Header({ toggleSidebar }) {
-  return (
-    <header className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700 shadow-lg sticky top-0 z-40 h-20 flex items-center">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4 flex-1">
-            <button onClick={toggleSidebar} className="text-white hover:text-slate-300 p-2 rounded-lg hover:bg-slate-800 transition-colors hidden md:block">
-              <Menu className="w-6 h-6" />
-            </button>
-            <div className="text-center sm:text-left sm:flex-none">
-              <h1 className="text-xl font-bold text-white tracking-wide">
-                Sistema de Control Interno
-              </h1>
-              <p className="text-xs text-slate-300 mt-0.5">Coordinación de Adquisiciones</p>
-            </div>
-          </div>
+function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }) {
+  // Definir menús según el rol
+  const getMenuItems = () => {
+    const baseMenus = {
+      dashboard: { id: 'dashboard', icon: BarChart3, label: 'Dashboard', description: 'Panel de control' },
+      expedientes: { id: 'expedientes', icon: FileText, label: 'Nuevo Expediente', description: 'Crear solicitud' },
+      misSolicitudes: { id: 'misSolicitudes', icon: Clock, label: 'Mis Solicitudes', description: 'Ver mis expedientes' },
+      bandejaValidacion: { id: 'bandejaValidacion', icon: FileText, label: 'Bandeja Validación', description: 'Validar expedientes' },
+      incidencias: { id: 'incidencias', icon: AlertCircle, label: 'Incidencias', description: 'Gestionar incidencias' },
+      bandejaAprobacion: { id: 'bandejaAprobacion', icon: Check, label: 'Bandeja Aprobación', description: 'Aprobar expedientes' },
+      alerts: { id: 'alerts', icon: Bell, label: 'Alertas', description: 'Centro de alertas' },
+      timeline: { id: 'timeline', icon: Clock, label: 'Timeline', description: 'Trazabilidad' },
+      documentos: { id: 'documentos', icon: Calendar, label: 'Documentos', description: 'Documentos y vigencias' },
+    };
 
-          <div className="hidden sm:flex items-center gap-4">
-            <div className="h-16 flex items-center justify-center py-1">
-              <img src="/logo-justos.png" alt="Logo Justos" className="h-full w-auto object-contain drop-shadow-md hover:drop-shadow-xl transition-all" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
+    switch (user?.role) {
+      case 'admin':
+        return [baseMenus.dashboard, baseMenus.expedientes, baseMenus.misSolicitudes, baseMenus.timeline, baseMenus.alerts];
+      case 'user':
+        return [baseMenus.dashboard, baseMenus.bandejaValidacion, baseMenus.incidencias, baseMenus.timeline];
+      case 'gerente':
+        return [baseMenus.dashboard, baseMenus.bandejaAprobacion, baseMenus.alerts, baseMenus.documentos];
+      default:
+        return [baseMenus.dashboard, baseMenus.expedientes, baseMenus.timeline, baseMenus.alerts];
+    }
+  };
 
-function Sidebar({ activeTab, setActiveTab, isOpen }) {
-  const menuItems = [
-    { id: 'dashboard', icon: BarChart3, label: 'Dashboard', description: 'Panel de control' },
-    { id: 'expedientes', icon: FileText, label: 'Expedientes', description: 'Gestión' },
-    { id: 'documentos', icon: Calendar, label: 'Documentos', description: 'Documentos y vigencias' },
-    { id: 'timeline', icon: Clock, label: 'Timeline', description: 'Trazabilidad' },
-    { id: 'alerts', icon: AlertCircle, label: 'Alertas', description: 'Centro de alertas' },
-  ];
+  const menuItems = getMenuItems();
+
+  const getRoleName = (role: string) => {
+    switch (role) {
+      case 'admin': return 'Administrador';
+      case 'user': return 'Analista';
+      case 'gerente': return 'Gerente';
+      default: return role;
+    }
+  };
 
   return (
     <aside className={`w-64 bg-slate-900 border-r border-slate-800 h-[calc(100vh-5rem)] fixed left-0 top-20 overflow-y-auto z-30 transition-transform duration-300 hidden md:block ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
@@ -177,15 +178,21 @@ function Sidebar({ activeTab, setActiveTab, isOpen }) {
       </nav>
 
       <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-slate-800 bg-slate-900">
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-4 flex items-center gap-3">
-          <img src="https://ui-avatars.com/api/?name=Analista&background=3b82f6&color=fff" className="w-10 h-10 rounded-lg" alt="User"/>
-          <div className="flex-1 overflow-hidden">
-            <p className="text-sm font-semibold text-white truncate">Usuario Activo</p>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              <p className="text-xs text-slate-400">En línea</p>
+        <div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
+          <div className="flex items-center gap-3 mb-3">
+            <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'Usuario')}&background=3b82f6&color=fff`} className="w-10 h-10 rounded-lg" alt="User"/>
+            <div className="flex-1 overflow-hidden">
+              <p className="text-sm font-semibold text-white truncate">{user?.name || 'Usuario'}</p>
+              <p className="text-xs text-slate-400">{getRoleName(user?.role || '')}</p>
             </div>
           </div>
+          <button
+            onClick={logout}
+            className="w-full bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors font-medium text-sm"
+          >
+            <LogOut className="w-4 h-4" />
+            Cerrar Sesión
+          </button>
         </div>
       </div>
     </aside>
@@ -610,25 +617,56 @@ function ExpedientesView() {
 
 // --- MAIN APP COMPONENT ---
 
-function HomeContent() {
+function HomeContent({ user, logout }) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
+  // Obtener los menús según el rol para la navegación móvil
+  const getMobileMenuItems = () => {
+    switch (user?.role) {
+      case 'admin':
+        return [
+          { id: 'dashboard', icon: BarChart3 },
+          { id: 'expedientes', icon: FileText },
+          { id: 'misSolicitudes', icon: Clock },
+          { id: 'timeline', icon: Clock },
+          { id: 'alerts', icon: Bell }
+        ];
+      case 'user':
+        return [
+          { id: 'dashboard', icon: BarChart3 },
+          { id: 'bandejaValidacion', icon: FileText },
+          { id: 'incidencias', icon: AlertCircle },
+          { id: 'timeline', icon: Clock }
+        ];
+      case 'gerente':
+        return [
+          { id: 'dashboard', icon: BarChart3 },
+          { id: 'bandejaAprobacion', icon: Check },
+          { id: 'alerts', icon: Bell },
+          { id: 'documentos', icon: Calendar }
+        ];
+      default:
+        return [
+          { id: 'dashboard', icon: BarChart3 },
+          { id: 'expedientes', icon: FileText },
+          { id: 'timeline', icon: Clock },
+          { id: 'alerts', icon: Bell }
+        ];
+    }
+  };
+
+  const mobileMenuItems = getMobileMenuItems();
+
   return (
     <div className="min-h-screen bg-slate-200 font-sans text-slate-800">
-      <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <HeaderWithLogout toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div className="flex">
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isOpen={isSidebarOpen} />
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isOpen={isSidebarOpen} user={user} logout={logout} />
         
         {/* Mobile Navigation */}
         <div className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 z-50 flex justify-around p-3 overflow-x-auto">
-          {[
-            { id: 'dashboard', icon: BarChart3 },
-            { id: 'expedientes', icon: FileText },
-            { id: 'documentos', icon: Calendar },
-            { id: 'timeline', icon: Clock },
-            { id: 'alerts', icon: AlertCircle }
-          ].map(tab => (
+          {mobileMenuItems.map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`p-3 rounded-xl flex-shrink-0 ${activeTab === tab.id ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}>
               <tab.icon className="w-6 h-6" />
             </button>
@@ -641,6 +679,10 @@ function HomeContent() {
             {activeTab === 'timeline' && <TimelineView />}
             {activeTab === 'alerts' && <AlertsView />}
             {activeTab === 'expedientes' && <ExpedientesView />}
+            {activeTab === 'misSolicitudes' && <TimelineView />}
+            {activeTab === 'bandejaValidacion' && <AlertsView />}
+            {activeTab === 'bandejaAprobacion' && <AlertsView />}
+            {activeTab === 'incidencias' && <AlertsView />}
             {activeTab === 'documentos' && <ExpedienteDetalleView onBack={() => setActiveTab('expedientes')} />}
           </div>
         </main>
@@ -651,7 +693,6 @@ function HomeContent() {
 
 export default function Home() {
   const { isAuthenticated, loading, logout, user } = useAuth();
-  const [activeTab, setActiveTab] = useState('dashboard');
 
   // Si está cargando la sesión, mostrar loading
   if (loading) {
@@ -671,15 +712,10 @@ export default function Home() {
   }
 
   // Si está autenticado, mostrar el dashboard
-  return (
-    <div className="min-h-screen bg-slate-200 font-sans text-slate-800">
-      <HeaderWithLogout toggleSidebar={() => {}} user={user} logout={logout} />
-      <HomeContent />
-    </div>
-  );
+  return <HomeContent user={user} logout={logout} />;
 }
 
-function HeaderWithLogout({ toggleSidebar, user, logout }) {
+function HeaderWithLogout({ toggleSidebar }) {
   return (
     <header className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700 shadow-lg sticky top-0 z-40 h-20 flex items-center">
       <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -694,19 +730,10 @@ function HeaderWithLogout({ toggleSidebar, user, logout }) {
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-700 rounded-lg border border-slate-600">
-              <Users className="w-4 h-4 text-slate-400" />
-              <span className="text-sm text-slate-300">{user?.name}</span>
-              <span className="text-xs text-slate-500">({user?.role})</span>
+          <div className="hidden sm:flex items-center gap-4">
+            <div className="h-16 flex items-center justify-center py-1">
+              <img src="/logo-justos.png" alt="Logo Justos" className="h-full w-auto object-contain drop-shadow-md hover:drop-shadow-xl transition-all" />
             </div>
-            <button
-              onClick={logout}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors font-medium text-sm shadow-md"
-            >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Cerrar Sesión</span>
-            </button>
           </div>
         </div>
       </div>
