@@ -53,11 +53,11 @@ export default function LoginView() {
       <div className="relative w-full max-w-md">
         <div className="bg-slate-800 rounded-2xl shadow-2xl p-8 border border-slate-700">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mb-4">
-              <LogIn className="w-8 h-8 text-white" />
+            <div className="inline-flex items-center justify-center w-24 h-24 mb-4">
+              <img src="/logo-mpprijp.png" alt="MPPRIJP" className="w-full h-full object-contain drop-shadow-lg" />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Sistema de Control</h1>
-            <p className="text-slate-400">Gestión de Compras Internas</p>
+            <h1 className="text-2xl font-bold text-white mb-2">Sistema de Control Interno</h1>
+            <p className="text-slate-400">Gestión de Compras - MPPRIJP</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
