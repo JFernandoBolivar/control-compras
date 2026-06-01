@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type UserRole = 'solicitante' | 'analista' | 'aprobador' | 'pagador' | 'auditor';
+export type UserRole = 'solicitante' | 'analista' | 'aprobador' | 'auditor';
 
 export interface User {
   id: string;
@@ -70,16 +70,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: 'aprobador@mpprijp.gob.ve',
           role: 'aprobador',
           name: 'José Rodríguez',
-        },
-      },
-      pagador: {
-        password: 'pagador',
-        user: {
-          id: '4',
-          username: 'pagador',
-          email: 'pagador@mpprijp.gob.ve',
-          role: 'pagador',
-          name: 'Ana Martínez',
         },
       },
       auditor: {

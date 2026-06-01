@@ -582,7 +582,7 @@ function NuevoExpedienteView() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Punto de Cuenta / Oficio de Requerimiento<span className="text-red-500">*</span></label>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Punto de Cuenta <span className="text-red-500">*</span></label>
                 <input name="puntoCuenta" required type="text" placeholder="DM-045-2026" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div>
@@ -1136,166 +1136,6 @@ function AlertasView() {
   );
 }
 
-// --- VISTAS PAGADOR ---
-
-function BandejaPagosView() {
-  const { expedientes, actualizarEstado, agregarDocumento } = useExpedientes();
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedExp, setSelectedExp] = useState<string | null>(null);
-  const [actaName, setActaName] = useState('acta_recepcion.pdf');
-
-  const aprobados = expedientes.filter(e => e.estado === 'Aprobado');
-  const recepcion = expedientes.filter(e => e.estado === 'RecepcionBienesServicios');
-
-  const handleAdjuntarActa = () => {
-    if (selectedExp && actaName) {
-      agregarDocumento(selectedExp, actaName);
-      actualizarEstado(selectedExp, 'RecepcionBienesServicios', 'Acta de recepción adjuntada');
-      setDialogOpen(false);
-      setSelectedExp(null);
-    }
-  };
-
-  const handleRegistrarPago = (id: string) => {
-    actualizarEstado(id, 'Pagado', 'Pago registrado');
-  };
-
-  return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-800">Bandeja de Pagos</h2>
-        <p className="text-sm text-slate-500">Gestión de pagos de expedientes aprobados</p>
-      </div>
-
-      {aprobados.length > 0 && (
-        <div className="bg-slate-100 rounded-xl border border-slate-300 p-6 mb-4">
-          <h3 className="font-bold text-slate-800 mb-4">Expedientes Aprobados - Pendientes de Acta</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-200">
-                <tr>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">ID</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Proveedor</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Monto</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {aprobados.map(exp => (
-                  <tr key={exp.id} className="border-b border-slate-200 hover:bg-slate-50">
-                    <td className="py-3 px-4 font-mono text-xs">{exp.id}</td>
-                    <td className="py-3 px-4">{exp.razonSocial}</td>
-                    <td className="py-3 px-4 font-mono">Bs. {exp.monto.toLocaleString()}</td>
-                    <td className="py-3 px-4">
-                      <button onClick={() => { setSelectedExp(exp.id); setDialogOpen(true); }} className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 flex items-center gap-1">
-                        <Upload className="w-3 h-3" /> Adjuntar Acta de Recepción
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {recepcion.length > 0 && (
-        <div className="bg-slate-100 rounded-xl border border-slate-300 p-6">
-          <h3 className="font-bold text-slate-800 mb-4">Listos para Pago</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-200">
-                <tr>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">ID</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Proveedor</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Monto</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recepcion.map(exp => (
-                  <tr key={exp.id} className="border-b border-slate-200 hover:bg-slate-50">
-                    <td className="py-3 px-4 font-mono text-xs">{exp.id}</td>
-                    <td className="py-3 px-4">{exp.razonSocial}</td>
-                    <td className="py-3 px-4 font-mono">Bs. {exp.monto.toLocaleString()}</td>
-                    <td className="py-3 px-4">
-                      <button onClick={() => handleRegistrarPago(exp.id)} className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 flex items-center gap-1">
-                        <CreditCard className="w-3 h-3" /> Registrar Pago
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {aprobados.length === 0 && recepcion.length === 0 && (
-        <div className="bg-slate-100 rounded-xl border border-slate-300 p-8 text-center text-slate-500">
-          No hay expedientes pendientes de pago
-        </div>
-      )}
-
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} title="Adjuntar Acta de Recepción">
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Nombre del archivo</label>
-            <input type="text" value={actaName} onChange={e => setActaName(e.target.value)} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm" />
-          </div>
-          <div className="flex justify-end gap-2">
-            <button onClick={() => setDialogOpen(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-sm font-semibold">Cancelar</button>
-            <button onClick={handleAdjuntarActa} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">Adjuntar</button>
-          </div>
-        </div>
-      </Dialog>
-    </div>
-  );
-}
-
-function DocumentosPendientesView() {
-  const { expedientes } = useExpedientes();
-  const sinActa = expedientes.filter(e => e.estado === 'Aprobado' && !e.documentos.includes('acta_recepcion.pdf'));
-
-  return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-800">Documentos Pendientes</h2>
-        <p className="text-sm text-slate-500">Expedientes aprobados sin acta de recepción</p>
-      </div>
-
-      <div className="bg-slate-100 rounded-xl border border-slate-300 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-slate-200">
-              <tr>
-                <th className="text-left py-3 px-4 font-semibold text-slate-600">ID</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-600">Proveedor</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-600">Monto</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-600">Documentos Faltantes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sinActa.length === 0 ? (
-                <tr><td colSpan={4} className="py-8 text-center text-slate-500">Todos los expedientes tienen acta de recepción</td></tr>
-              ) : (
-                sinActa.map(exp => (
-                  <tr key={exp.id} className="border-b border-slate-200 hover:bg-slate-50">
-                    <td className="py-3 px-4 font-mono text-xs">{exp.id}</td>
-                    <td className="py-3 px-4">{exp.razonSocial}</td>
-                    <td className="py-3 px-4 font-mono">Bs. {exp.monto.toLocaleString()}</td>
-                    <td className="py-3 px-4"><Badge variant="error">acta_recepcion.pdf</Badge></td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // --- VISTAS AUDITOR ---
 
 function ReportesAuditoriaView() {
@@ -1465,11 +1305,6 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
         { id: 'bandejaAprobacion', icon: Check, label: 'Bandeja Aprobación', description: 'Aprobar expedientes' },
         { id: 'alertas', icon: Bell, label: 'Alertas', description: 'Centro de alertas' },
       ],
-      pagador: [
-        { id: 'dashboard', icon: BarChart3, label: 'Dashboard', description: 'Panel de control' },
-        { id: 'bandejaPagos', icon: CreditCard, label: 'Bandeja de Pagos', description: 'Registrar pagos' },
-        { id: 'documentosPendientes', icon: Clock, label: 'Documentos Pendientes', description: 'Actas faltantes' },
-      ],
       auditor: [
         { id: 'dashboard', icon: BarChart3, label: 'Dashboard', description: 'Panel de control' },
         { id: 'reportesAuditoria', icon: ClipboardList, label: 'Reportes de Auditoría', description: 'Análisis de control' },
@@ -1487,7 +1322,6 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
       solicitante: 'Solicitante',
       analista: 'Analista',
       aprobador: 'Aprobador',
-      pagador: 'Pagador',
       auditor: 'Auditor',
     };
     return roles[role] || role;
@@ -1585,8 +1419,6 @@ function HomeContent({ user, logout }: { user: any; logout: () => void }) {
       case 'incidencias': return <IncidenciasView />;
       case 'bandejaAprobacion': return <BandejaAprobacionView />;
       case 'alertas': return <AlertasView />;
-      case 'bandejaPagos': return <BandejaPagosView />;
-      case 'documentosPendientes': return <DocumentosPendientesView />;
       case 'reportesAuditoria': return <ReportesAuditoriaView />;
       case 'muestreoAleatorio': return <MuestreoAleatorioView />;
       default: return <DashboardView />;
@@ -1610,11 +1442,6 @@ function HomeContent({ user, logout }: { user: any; logout: () => void }) {
         { id: 'dashboard', icon: BarChart3 },
         { id: 'bandejaAprobacion', icon: Check },
         { id: 'alertas', icon: Bell },
-      ],
-      pagador: [
-        { id: 'dashboard', icon: BarChart3 },
-        { id: 'bandejaPagos', icon: CreditCard },
-        { id: 'documentosPendientes', icon: Clock },
       ],
       auditor: [
         { id: 'dashboard', icon: BarChart3 },
