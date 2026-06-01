@@ -692,22 +692,15 @@ function NuevoExpedienteView() {
                   <option value="Consulta de Precio">Consulta de Precio</option>
                   <option value="Concurso Abierto">Concurso Abierto</option><option value="Concurso Cerrado">Concurso Cerrado</option>
                   <option value="Adjudicación Directa">Adjudicación Directa</option>
-                  
+
                 </select>
               </div>
             </div>
           </section>
 
-          <hr className="border-slate-300" />
 
-          <section>
-            <h4 className="text-xs font-bold text-indigo-700 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <span className="bg-indigo-200 w-6 h-6 rounded flex items-center justify-center border border-indigo-300">4</span> Documentos (Simulado)
-            </h4>
-            <div className="bg-slate-50 border border-slate-300 rounded-lg p-4 text-sm text-slate-600">
-              <p>Los documentos se adjuntarán durante el proceso de validación.</p>
-            </div>
-          </section>
+
+
         </div>
 
         <div className="bg-slate-200/50 px-8 py-5 border-t border-slate-300 flex justify-end gap-4">
@@ -1512,8 +1505,8 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 group ${isActive
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                 }`}
             >
               <div className={`p-2 rounded-lg transition-colors ${isActive ? 'bg-white/20' : 'bg-slate-800 group-hover:bg-slate-700'}`}>
