@@ -64,9 +64,11 @@ const ExpedientesContext = createContext<ExpedientesContextType | undefined>(und
 
 const documentosRequeridos = [
   'oficio_requisicion.pdf',
+  
   'acta_recepcion.pdf',
-  'orden_compra_servicio.pdf',
   'nota_entrega.pdf',
+  'orden_compra_servicio.pdf',
+
   'presupuesto.pdf',
   'conformidad_buena_ejecicion.pdf',
   'registro_compromiso.pdf',
