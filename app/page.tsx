@@ -64,16 +64,19 @@ const ExpedientesContext = createContext<ExpedientesContextType | undefined>(und
 
 const documentosRequeridos = [
   'oficio_requisicion.pdf',
-  'acta_recepcion.pdf',
-  'orden_compra_servicio.pdf',
   'conformidad_buena_ejecicion.pdf',
+  
+  'orden_compra_servicio.pdf',
+  'registro_compromiso.pdf',
+  
   'presupuesto.pdf',
- 'nota_entrega.pdf',
+  'registro_causado.pdf'
+  'nota_entrega.pdf',
 
   
   
-  'registro_compromiso.pdf',
-  'registro_causado.pdf'
+  
+
 ];
 
 // --- MOCK DATA INICIAL ---
