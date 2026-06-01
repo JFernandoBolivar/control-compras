@@ -582,7 +582,7 @@ function NuevoExpedienteView() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Punto de Cuenta <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5">N° Punto de Cuenta / N° Oficio de Requerimiento <span className="text-red-500">*</span></label>
                 <input name="puntoCuenta" required type="text" placeholder="DM-045-2026" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div>
