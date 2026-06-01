@@ -141,7 +141,7 @@ export default function LoginView() {
 
           <div className="mt-6 pt-6 border-t border-slate-700">
             <p className="text-slate-500 text-xs text-center">
-              Sistema de gestión de Adquisición, Bienes y Servicios de  coordinación de la Dirección de Administración, perteneciente a la Oficina de Gestión Administrativa del  MPPRIJP.
+              Sistema de Gestión de Adquisición, Bienes y Servicios de la Coordinación adscrita a la Dirección de Administración, perteneciente a la Oficina de Gestión Administrativa del MPPRIJP.
             </p>
           </div>
         </div>
