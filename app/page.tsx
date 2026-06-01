@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, createContext, useContext } from 'react';
-import { 
+import {
   LayoutDashboard, Clock, Bell, FileText, BarChart3, AlertCircle, AlertTriangle,
   CheckCircle2, Info, Trash2, Search, TrendingUp, Users, Check, X, Menu, Calendar, LogOut,
   Upload, Eye, FileCheck, CreditCard, ClipboardList, Shuffle, Plus, ChevronDown
@@ -11,13 +11,13 @@ import LoginView from '@/components/login-view';
 
 // --- TIPOS Y ESTADOS ---
 
-type ExpedienteEstado = 
-  | 'ValidacionLegalPendiente' 
-  | 'DocumentacionPendiente' 
-  | 'ListoParaAprobacion' 
-  | 'Aprobado' 
-  | 'RecepcionBienesServicios' 
-  | 'Pagado' 
+type ExpedienteEstado =
+  | 'ValidacionLegalPendiente'
+  | 'DocumentacionPendiente'
+  | 'ListoParaAprobacion'
+  | 'Aprobado'
+  | 'RecepcionBienesServicios'
+  | 'Pagado'
   | 'Registrado';
 
 interface Expediente {
@@ -64,10 +64,19 @@ const ExpedientesContext = createContext<ExpedientesContextType | undefined>(und
 
 const documentosRequeridos = [
   'oficio_requisicion.pdf',
-  'presupuesto.pdf',
+  'conformidad_buena_ejecicion.pdf',
+  
   'orden_compra_servicio.pdf',
+  'registro_compromiso.pdf',
+  
+  'presupuesto.pdf',
+  'registro_causado.pdf',
   'nota_entrega.pdf',
-  'acta_recepcion.pdf'
+
+  
+  
+  
+
 ];
 
 // --- MOCK DATA INICIAL ---
@@ -292,16 +301,16 @@ function ExpedientesProvider({ children }: { children: React.ReactNode }) {
   const actualizarEstado = (id: string, nuevoEstado: ExpedienteEstado, comentario?: string) => {
     setExpedientes(prev => prev.map(exp => {
       if (exp.id === id) {
-        const eventoTexto = comentario 
+        const eventoTexto = comentario
           ? `Estado cambiado a ${nuevoEstado}: ${comentario}`
           : `Estado cambiado a ${nuevoEstado}`;
         return {
           ...exp,
           estado: nuevoEstado,
-          timeline: [...exp.timeline, { 
-            fecha: new Date().toISOString().slice(0, 16).replace('T', ' '), 
-            evento: eventoTexto, 
-            usuario: 'Sistema' 
+          timeline: [...exp.timeline, {
+            fecha: new Date().toISOString().slice(0, 16).replace('T', ' '),
+            evento: eventoTexto,
+            usuario: 'Sistema'
           }]
         };
       }
@@ -315,10 +324,10 @@ function ExpedientesProvider({ children }: { children: React.ReactNode }) {
         return {
           ...exp,
           documentos: [...exp.documentos, documento],
-          timeline: [...exp.timeline, { 
-            fecha: new Date().toISOString().slice(0, 16).replace('T', ' '), 
-            evento: `Documento agregado: ${documento}`, 
-            usuario: 'Sistema' 
+          timeline: [...exp.timeline, {
+            fecha: new Date().toISOString().slice(0, 16).replace('T', ' '),
+            evento: `Documento agregado: ${documento}`,
+            usuario: 'Sistema'
           }]
         };
       }
@@ -327,7 +336,7 @@ function ExpedientesProvider({ children }: { children: React.ReactNode }) {
   };
 
   const actualizarIncidencia = (id: string, nuevoEstado: Incidencia['estado']) => {
-    setIncidencias(prev => prev.map(inc => 
+    setIncidencias(prev => prev.map(inc =>
       inc.id === id ? { ...inc, estado: nuevoEstado } : inc
     ));
   };
@@ -394,7 +403,7 @@ function Dropdown({ trigger, children, open, setOpen }: { trigger: React.ReactNo
 
 function DashboardView() {
   const { expedientes } = useExpedientes();
-  
+
   const stats = {
     total: expedientes.length,
     pendientes: expedientes.filter(e => e.estado === 'ValidacionLegalPendiente' || e.estado === 'DocumentacionPendiente').length,
@@ -488,7 +497,7 @@ function NuevoExpedienteView() {
       setProveedorSancionado(null);
       return;
     }
-    
+
     setVerificandoRif(true);
     // Simulamos una verificación con delay
     setTimeout(() => {
@@ -512,15 +521,15 @@ function NuevoExpedienteView() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     // Verificar si el proveedor está sancionado
     if (proveedorSancionado?.sancionado) {
       return; // No permitir envío
     }
-    
+
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    
+
     setTimeout(() => {
       agregarExpediente({
         tipo: formData.get('tipo') as 'compra' | 'servicio',
@@ -566,7 +575,7 @@ function NuevoExpedienteView() {
         <div className="bg-slate-200/50 px-8 py-5 border-b border-slate-300">
           <h3 className="font-bold text-slate-800">Formulario de Registro</h3>
         </div>
-        
+
         <div className="p-8 space-y-8">
           <section>
             <h4 className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-4 flex items-center gap-2">
@@ -582,7 +591,7 @@ function NuevoExpedienteView() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Punto de Cuenta <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5">N° Punto de Cuenta / N° Oficio de Requerimiento <span className="text-red-500">*</span></label>
                 <input name="puntoCuenta" required type="text" placeholder="DM-045-2026" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
               </div>
               <div>
@@ -640,15 +649,14 @@ function NuevoExpedienteView() {
               <div className="md:col-span-3">
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">RIF <span className="text-red-500">*</span></label>
                 <div className="flex gap-2">
-                  <input 
-                    name="rif" 
-                    required 
-                    type="text" 
-                    placeholder="J-12345678-9" 
+                  <input
+                    name="rif"
+                    required
+                    type="text"
+                    placeholder="J-12345678-9"
                     onChange={(e) => verificarRif(e.target.value)}
-                    className={`flex-1 px-4 py-2.5 bg-slate-50 border rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 outline-none ${
-                      proveedorSancionado?.sancionado ? 'border-red-500 bg-red-50' : 'border-slate-300'
-                    }`} 
+                    className={`flex-1 px-4 py-2.5 bg-slate-50 border rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 outline-none ${proveedorSancionado?.sancionado ? 'border-red-500 bg-red-50' : 'border-slate-300'
+                      }`}
                   />
                   {verificandoRif && (
                     <div className="flex items-center px-3">
@@ -690,35 +698,29 @@ function NuevoExpedienteView() {
               <div className="md:col-span-2">
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">Modalidad</label>
                 <select name="modalidad" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                  <option value="Consulta de Precio">Consulta de Precio</option>
+                  <option value="Concurso Abierto">Concurso Abierto</option><option value="Concurso Cerrado">Concurso Cerrado</option>
                   <option value="Adjudicación Directa">Adjudicación Directa</option>
-                  <option value="Concurso Abierto">Concurso Abierto</option>
+
                 </select>
               </div>
             </div>
           </section>
 
-          <hr className="border-slate-300" />
 
-          <section>
-            <h4 className="text-xs font-bold text-indigo-700 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <span className="bg-indigo-200 w-6 h-6 rounded flex items-center justify-center border border-indigo-300">4</span> Documentos (Simulado)
-            </h4>
-            <div className="bg-slate-50 border border-slate-300 rounded-lg p-4 text-sm text-slate-600">
-              <p>Los documentos se adjuntarán durante el proceso de validación.</p>
-            </div>
-          </section>
+
+
         </div>
 
         <div className="bg-slate-200/50 px-8 py-5 border-t border-slate-300 flex justify-end gap-4">
           <button type="reset" onClick={() => setProveedorSancionado(null)} className="px-6 py-2.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg shadow-sm">
             Limpiar
           </button>
-          <button 
-            disabled={loading || proveedorSancionado?.sancionado} 
-            type="submit" 
-            className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-md flex items-center gap-2 disabled:opacity-50 ${
-              proveedorSancionado?.sancionado ? 'bg-red-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-            }`}
+          <button
+            disabled={loading || proveedorSancionado?.sancionado}
+            type="submit"
+            className={`px-6 py-2.5 text-sm font-bold text-white rounded-lg shadow-md flex items-center gap-2 disabled:opacity-50 ${proveedorSancionado?.sancionado ? 'bg-red-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+              }`}
           >
             {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Check className="w-4 h-4" />}
             {proveedorSancionado?.sancionado ? 'Proveedor Sancionado' : loading ? 'Procesando...' : 'Crear Expediente'}
@@ -732,7 +734,7 @@ function NuevoExpedienteView() {
 function MisSolicitudesView() {
   const { expedientes } = useExpedientes();
   const { user } = useAuth();
-  
+
   const misExpedientes = expedientes.filter(e => e.creadoPor === user?.id);
 
   return (
@@ -1143,173 +1145,13 @@ function AlertasView() {
   );
 }
 
-// --- VISTAS PAGADOR ---
-
-function BandejaPagosView() {
-  const { expedientes, actualizarEstado, agregarDocumento } = useExpedientes();
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedExp, setSelectedExp] = useState<string | null>(null);
-  const [actaName, setActaName] = useState('acta_recepcion.pdf');
-
-  const aprobados = expedientes.filter(e => e.estado === 'Aprobado');
-  const recepcion = expedientes.filter(e => e.estado === 'RecepcionBienesServicios');
-
-  const handleAdjuntarActa = () => {
-    if (selectedExp && actaName) {
-      agregarDocumento(selectedExp, actaName);
-      actualizarEstado(selectedExp, 'RecepcionBienesServicios', 'Acta de recepción adjuntada');
-      setDialogOpen(false);
-      setSelectedExp(null);
-    }
-  };
-
-  const handleRegistrarPago = (id: string) => {
-    actualizarEstado(id, 'Pagado', 'Pago registrado');
-  };
-
-  return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-800">Bandeja de Pagos</h2>
-        <p className="text-sm text-slate-500">Gestión de pagos de expedientes aprobados</p>
-      </div>
-
-      {aprobados.length > 0 && (
-        <div className="bg-slate-100 rounded-xl border border-slate-300 p-6 mb-4">
-          <h3 className="font-bold text-slate-800 mb-4">Expedientes Aprobados - Pendientes de Acta</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-200">
-                <tr>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">ID</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Proveedor</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Monto</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {aprobados.map(exp => (
-                  <tr key={exp.id} className="border-b border-slate-200 hover:bg-slate-50">
-                    <td className="py-3 px-4 font-mono text-xs">{exp.id}</td>
-                    <td className="py-3 px-4">{exp.razonSocial}</td>
-                    <td className="py-3 px-4 font-mono">Bs. {exp.monto.toLocaleString()}</td>
-                    <td className="py-3 px-4">
-                      <button onClick={() => { setSelectedExp(exp.id); setDialogOpen(true); }} className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 flex items-center gap-1">
-                        <Upload className="w-3 h-3" /> Adjuntar Acta de Recepción
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {recepcion.length > 0 && (
-        <div className="bg-slate-100 rounded-xl border border-slate-300 p-6">
-          <h3 className="font-bold text-slate-800 mb-4">Listos para Pago</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-200">
-                <tr>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">ID</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Proveedor</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Monto</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recepcion.map(exp => (
-                  <tr key={exp.id} className="border-b border-slate-200 hover:bg-slate-50">
-                    <td className="py-3 px-4 font-mono text-xs">{exp.id}</td>
-                    <td className="py-3 px-4">{exp.razonSocial}</td>
-                    <td className="py-3 px-4 font-mono">Bs. {exp.monto.toLocaleString()}</td>
-                    <td className="py-3 px-4">
-                      <button onClick={() => handleRegistrarPago(exp.id)} className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 flex items-center gap-1">
-                        <CreditCard className="w-3 h-3" /> Registrar Pago
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {aprobados.length === 0 && recepcion.length === 0 && (
-        <div className="bg-slate-100 rounded-xl border border-slate-300 p-8 text-center text-slate-500">
-          No hay expedientes pendientes de pago
-        </div>
-      )}
-
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} title="Adjuntar Acta de Recepción">
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Nombre del archivo</label>
-            <input type="text" value={actaName} onChange={e => setActaName(e.target.value)} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm" />
-          </div>
-          <div className="flex justify-end gap-2">
-            <button onClick={() => setDialogOpen(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-sm font-semibold">Cancelar</button>
-            <button onClick={handleAdjuntarActa} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">Adjuntar</button>
-          </div>
-        </div>
-      </Dialog>
-    </div>
-  );
-}
-
-function DocumentosPendientesView() {
-  const { expedientes } = useExpedientes();
-  const sinActa = expedientes.filter(e => e.estado === 'Aprobado' && !e.documentos.includes('acta_recepcion.pdf'));
-
-  return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-800">Documentos Pendientes</h2>
-        <p className="text-sm text-slate-500">Expedientes aprobados sin acta de recepción</p>
-      </div>
-
-      <div className="bg-slate-100 rounded-xl border border-slate-300 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-slate-200">
-              <tr>
-                <th className="text-left py-3 px-4 font-semibold text-slate-600">ID</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-600">Proveedor</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-600">Monto</th>
-                <th className="text-left py-3 px-4 font-semibold text-slate-600">Documentos Faltantes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sinActa.length === 0 ? (
-                <tr><td colSpan={4} className="py-8 text-center text-slate-500">Todos los expedientes tienen acta de recepción</td></tr>
-              ) : (
-                sinActa.map(exp => (
-                  <tr key={exp.id} className="border-b border-slate-200 hover:bg-slate-50">
-                    <td className="py-3 px-4 font-mono text-xs">{exp.id}</td>
-                    <td className="py-3 px-4">{exp.razonSocial}</td>
-                    <td className="py-3 px-4 font-mono">Bs. {exp.monto.toLocaleString()}</td>
-                    <td className="py-3 px-4"><Badge variant="error">acta_recepcion.pdf</Badge></td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // --- VISTAS AUDITOR ---
 
 function ReportesAuditoriaView() {
   const { expedientes } = useExpedientes();
 
   const docsIncompletos = expedientes.filter(exp => {
-    const faltantes = documentosRequeridos.filter(doc => 
+    const faltantes = documentosRequeridos.filter(doc =>
       !exp.documentos.some(d => d.toLowerCase().includes(doc.toLowerCase().replace('.pdf', '')))
     );
     return faltantes.length > 0 && exp.estado !== 'ValidacionLegalPendiente';
@@ -1345,7 +1187,7 @@ function ReportesAuditoriaView() {
                 <tr><td colSpan={3} className="py-8 text-center text-slate-500">Todos los expedientes tienen documentación completa</td></tr>
               ) : (
                 docsIncompletos.map(exp => {
-                  const faltantes = documentosRequeridos.filter(doc => 
+                  const faltantes = documentosRequeridos.filter(doc =>
                     !exp.documentos.some(d => d.toLowerCase().includes(doc.toLowerCase().replace('.pdf', '')))
                   );
                   return (
@@ -1472,11 +1314,6 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
         { id: 'bandejaAprobacion', icon: Check, label: 'Bandeja Aprobación', description: 'Aprobar expedientes' },
         { id: 'alertas', icon: Bell, label: 'Alertas', description: 'Centro de alertas' },
       ],
-      pagador: [
-        { id: 'dashboard', icon: BarChart3, label: 'Dashboard', description: 'Panel de control' },
-        { id: 'bandejaPagos', icon: CreditCard, label: 'Bandeja de Pagos', description: 'Registrar pagos' },
-        { id: 'documentosPendientes', icon: Clock, label: 'Documentos Pendientes', description: 'Actas faltantes' },
-      ],
       auditor: [
         { id: 'dashboard', icon: BarChart3, label: 'Dashboard', description: 'Panel de control' },
         { id: 'reportesAuditoria', icon: ClipboardList, label: 'Reportes de Auditoría', description: 'Análisis de control' },
@@ -1494,7 +1331,6 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
       solicitante: 'Solicitante',
       analista: 'Analista',
       aprobador: 'Aprobador',
-      pagador: 'Pagador',
       auditor: 'Auditor',
     };
     return roles[role] || role;
@@ -1506,16 +1342,15 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
-          
+
           return (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 group ${
-                isActive
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-              }`}
+              className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 group ${isActive
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                }`}
             >
               <div className={`p-2 rounded-lg transition-colors ${isActive ? 'bg-white/20' : 'bg-slate-800 group-hover:bg-slate-700'}`}>
                 <Icon className="w-5 h-5" />
@@ -1532,7 +1367,7 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
       <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-slate-800 bg-slate-900">
         <div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
           <div className="flex items-center gap-3 mb-3">
-            <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'Usuario')}&background=3b82f6&color=fff`} className="w-10 h-10 rounded-lg" alt="User"/>
+            <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'Usuario')}&background=3b82f6&color=fff`} className="w-10 h-10 rounded-lg" alt="User" />
             <div className="flex-1 overflow-hidden">
               <p className="text-sm font-semibold text-white truncate">{user?.name || 'Usuario'}</p>
               <p className="text-xs text-slate-400">{getRoleName(user?.role || '')}</p>
@@ -1565,7 +1400,7 @@ function HeaderWithLogout({ toggleSidebar }: { toggleSidebar: () => void }) {
               <p className="text-xs text-slate-400">Sistema de Control Interno</p>
             </div>
           </div>
-          
+
           <div className="hidden sm:flex items-center gap-4">
             <div className="h-16 flex items-center justify-center py-1">
               <img src="/logo-justos.png" alt="Logo Justos" className="h-full w-auto object-contain drop-shadow-md hover:drop-shadow-xl transition-all" />
@@ -1593,8 +1428,6 @@ function HomeContent({ user, logout }: { user: any; logout: () => void }) {
       case 'incidencias': return <IncidenciasView />;
       case 'bandejaAprobacion': return <BandejaAprobacionView />;
       case 'alertas': return <AlertasView />;
-      case 'bandejaPagos': return <BandejaPagosView />;
-      case 'documentosPendientes': return <DocumentosPendientesView />;
       case 'reportesAuditoria': return <ReportesAuditoriaView />;
       case 'muestreoAleatorio': return <MuestreoAleatorioView />;
       default: return <DashboardView />;
@@ -1619,11 +1452,6 @@ function HomeContent({ user, logout }: { user: any; logout: () => void }) {
         { id: 'bandejaAprobacion', icon: Check },
         { id: 'alertas', icon: Bell },
       ],
-      pagador: [
-        { id: 'dashboard', icon: BarChart3 },
-        { id: 'bandejaPagos', icon: CreditCard },
-        { id: 'documentosPendientes', icon: Clock },
-      ],
       auditor: [
         { id: 'dashboard', icon: BarChart3 },
         { id: 'reportesAuditoria', icon: ClipboardList },
@@ -1641,7 +1469,7 @@ function HomeContent({ user, logout }: { user: any; logout: () => void }) {
       <HeaderWithLogout toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div className="flex">
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isOpen={isSidebarOpen} user={user} logout={logout} />
-        
+
         <div className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 z-50 flex justify-around p-3 overflow-x-auto">
           {mobileMenuItems.map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`p-3 rounded-xl flex-shrink-0 ${activeTab === tab.id ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}>

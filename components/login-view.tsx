@@ -39,7 +39,6 @@ export default function LoginView() {
     { id: 'solicitante', label: 'Solicitante', desc: 'Crear expedientes' },
     { id: 'analista', label: 'Analista', desc: 'Validar documentos' },
     { id: 'aprobador', label: 'Aprobador', desc: 'Aprobar expedientes' },
-    { id: 'pagador', label: 'Pagador', desc: 'Registrar pagos' },
     { id: 'auditor', label: 'Auditor', desc: 'Auditar procesos' },
   ];
 
@@ -57,7 +56,7 @@ export default function LoginView() {
               <img src="/logo-mpprijp.png" alt="MPPRIJP" className="w-full h-full object-contain drop-shadow-lg" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">Sistema de Control Interno</h1>
-            <p className="text-slate-400">Gestión de Compras - MPPRIJP</p>
+            <p className="text-slate-400">Adquisicion, bienes y Servicios - OGA/Administación</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -142,7 +141,7 @@ export default function LoginView() {
 
           <div className="mt-6 pt-6 border-t border-slate-700">
             <p className="text-slate-500 text-xs text-center">
-              Sistema de gestión de compras internas. Todos los datos se guardan localmente en tu navegador.
+              Sistema de Gestión de Adquisición, Bienes y Servicios de la Coordinación adscrita a la Dirección de Administración, perteneciente a la Oficina de Gestión Administrativa del MPPRIJP.
             </p>
           </div>
         </div>
