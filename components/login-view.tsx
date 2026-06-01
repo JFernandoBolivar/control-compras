@@ -56,7 +56,7 @@ export default function LoginView() {
               <img src="/logo-mpprijp.png" alt="MPPRIJP" className="w-full h-full object-contain drop-shadow-lg" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">Sistema de Control Interno</h1>
-            <p className="text-slate-400">Gestión de Compras - MPPRIJP</p>
+            <p className="text-slate-400">Adquisicion /bienes y Servicios - OGA/Administación</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
