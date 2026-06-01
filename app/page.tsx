@@ -67,7 +67,10 @@ const documentosRequeridos = [
   'presupuesto.pdf',
   'orden_compra_servicio.pdf',
   'nota_entrega.pdf',
-  'acta_recepcion.pdf'
+  'acta_recepcion.pdf',
+  'conformidad_buena_ejecicion.pdf',
+  'registro_compromiso.pdf',
+  'registro_causado.pdf'
 ];
 
 // --- MOCK DATA INICIAL ---
