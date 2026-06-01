@@ -70,7 +70,7 @@ const documentosRequeridos = [
   'registro_compromiso.pdf',
   
   'presupuesto.pdf',
-  'registro_causado.pdf'
+  'registro_causado.pdf',
   'nota_entrega.pdf',
 
   
