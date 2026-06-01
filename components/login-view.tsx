@@ -56,7 +56,7 @@ export default function LoginView() {
               <img src="/logo-mpprijp.png" alt="MPPRIJP" className="w-full h-full object-contain drop-shadow-lg" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">Sistema de Control Interno</h1>
-            <p className="text-slate-400">Adquisicion /bienes y Servicios - OGA/Administación</p>
+            <p className="text-slate-400">Adquisicion, bienes y Servicios - OGA/Administación</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -141,7 +141,7 @@ export default function LoginView() {
 
           <div className="mt-6 pt-6 border-t border-slate-700">
             <p className="text-slate-500 text-xs text-center">
-              Sistema de gestión de compras internas. Todos los datos se guardan localmente en tu navegador.
+              Sistema de gestión de Adquisición, Bienes y Servicios de  coordinación de la Dirección de Administración, perteneciente a la Oficina de Gestión Administrativa del  MPPRIJP.
             </p>
           </div>
         </div>
