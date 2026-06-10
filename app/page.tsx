@@ -65,17 +65,17 @@ const ExpedientesContext = createContext<ExpedientesContextType | undefined>(und
 const documentosRequeridos = [
   'oficio_requisicion.pdf',
   'conformidad_buena_ejecicion.pdf',
-  
+
   'orden_compra_servicio.pdf',
   'registro_compromiso.pdf',
-  
+
   'presupuesto.pdf',
   'registro_causado.pdf',
   'nota_entrega.pdf',
 
-  
-  
-  
+
+
+
 
 ];
 
@@ -1165,7 +1165,7 @@ function ReportesAuditoriaView() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-800">Reportes de Auditoría</h2>
+        <h2 className="text-2xl font-bold text-slate-800">Reportes de Control Posterior</h2>
         <p className="text-sm text-slate-500">Análisis de expedientes para control interno</p>
       </div>
 
@@ -1259,7 +1259,7 @@ function MuestreoAleatorioView() {
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-slate-800">Muestreo Aleatorio</h2>
-        <p className="text-sm text-slate-500">Selección aleatoria de expedientes para auditoría</p>
+        <p className="text-sm text-slate-500">Selección aleatoria de expedientes para inspeccionar</p>
       </div>
 
       <div className="flex justify-center mb-6">
@@ -1316,7 +1316,7 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
       ],
       auditor: [
         { id: 'dashboard', icon: BarChart3, label: 'Dashboard', description: 'Panel de control' },
-        { id: 'reportesAuditoria', icon: ClipboardList, label: 'Reportes de Auditoría', description: 'Análisis de control' },
+        { id: 'reportesAuditoria', icon: ClipboardList, label: 'Reportes de Inspeccion', description: 'Análisis de control' },
         { id: 'muestreoAleatorio', icon: Shuffle, label: 'Muestreo Aleatorio', description: 'Selección aleatoria' },
         { id: 'incidencias', icon: AlertCircle, label: 'Incidencias', description: 'Gestionar incidencias' },
       ],
