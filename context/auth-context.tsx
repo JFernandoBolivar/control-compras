@@ -73,10 +73,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         },
       },
       auditor: {
-        password: 'control',
+        password: 'auditor',
         user: {
           id: '5',
-          username: 'control',
+          username: 'auditor',
           email: 'auditor@mpprijp.gob.ve',
           role: 'auditor',
           name: 'Luis García',
