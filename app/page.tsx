@@ -1316,7 +1316,7 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
       ],
       auditor: [
         { id: 'dashboard', icon: BarChart3, label: 'Dashboard', description: 'Panel de control' },
-        { id: 'reportesAuditoria', icon: ClipboardList, label: 'Reportes de Inspeccion', description: 'Análisis de control' },
+        { id: 'reportesAuditoria', icon: ClipboardList, label: 'Reportes de Inspección', description: 'Análisis de control' },
         { id: 'muestreoAleatorio', icon: Shuffle, label: 'Muestreo Aleatorio', description: 'Selección aleatoria' },
         { id: 'incidencias', icon: AlertCircle, label: 'Incidencias', description: 'Gestionar incidencias' },
       ],
