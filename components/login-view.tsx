@@ -39,7 +39,7 @@ export default function LoginView() {
     { id: 'solicitante', label: 'Solicitante', desc: 'Crear expedientes' },
     { id: 'analista', label: 'Analista', desc: 'Validar documentos' },
     { id: 'aprobador', label: 'Aprobador', desc: 'Aprobar expedientes' },
-    { id: 'auditor', label: 'Auditor', desc: 'Auditar procesos' },
+    { id: 'auditor', label: 'Control Posterior', desc: 'Inspeccionar Procesos' },
   ];
 
   return (
