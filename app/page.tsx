@@ -1331,7 +1331,7 @@ function Sidebar({ activeTab, setActiveTab, isOpen, user, logout }: { activeTab:
       solicitante: 'Solicitante',
       analista: 'Analista',
       aprobador: 'Aprobador',
-      auditor: 'Auditor',
+      auditor: 'Control Posterior',
     };
     return roles[role] || role;
   };
