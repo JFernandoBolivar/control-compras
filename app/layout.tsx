@@ -7,7 +7,7 @@ import './globals.css'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'MPPRIJP - Sistema de Control Interno',
+  title: 'SICEX-MPPRIJP - Sistema de Control Interno',
   description: 'Sistema interactivo de control interno para el Ministerio del Poder Popular para Relaciones Interiores, Justicia y Paz',
   generator: 'v0.app',
   icons: {
