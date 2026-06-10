@@ -1396,8 +1396,8 @@ function HeaderWithLogout({ toggleSidebar }: { toggleSidebar: () => void }) {
               <Menu className="w-6 h-6" />
             </button>
             <div>
-              <h1 className="text-xl font-bold text-white">MPPRIJP</h1>
-              <p className="text-xs text-slate-400">Sistema de Control Interno</p>
+              <h1 className="text-xl font-bold text-white">SICEX-MPPRIJP</h1>
+              <p className="text-xs text-slate-400">Sistema de Control de Expedientes</p>
             </div>
           </div>
 
