@@ -55,8 +55,8 @@ export default function LoginView() {
             <div className="inline-flex items-center justify-center w-24 h-24 mb-4">
               <img src="/logo-mpprijp.png" alt="MPPRIJP" className="w-full h-full object-contain drop-shadow-lg" />
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2">Sistema de Control Interno</h1>
-            <p className="text-slate-400">Adquisicion, bienes y Servicios - OGA/Administación</p>
+            <h1 className="text-2xl font-bold text-white mb-2">SICEX-MPPRIJP</h1>
+            <p className="text-slate-400">Coord. De Adquisiciones, Bienes y Servicios - Direc. De Admon. - Oficina de Gestión Administrativa</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
